@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nobaarr – Nonton apa malam ini?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+<style>
+:root{--bg:#F5F7FC;--card:#fff;--ink:#14172B;--mute:#656a86;--line:#E1E5F2;--blue:#3A3AF2;--blue-d:#2727C9;--sun:#FFD23F;--r:18px;
+--d:'Bricolage Grotesque',system-ui,sans-serif;--b:'Figtree',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}
+body{font-family:var(--b);background:var(--bg);color:var(--ink);line-height:1.55}
+[x-cloak]{display:none!important}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:20;background:rgba(245,247,252,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:16px;height:68px}
+.logo{font:800 28px var(--d);letter-spacing:-.04em;color:var(--blue);display:flex;align-items:center;gap:8px}
+.logo i{width:14px;height:14px;background:var(--sun);border-radius:50%;box-shadow:0 0 0 3px var(--ink)}
+.search{flex:1;max-width:420px;margin-left:auto;position:relative}
+.search input{width:100%;padding:11px 16px 11px 42px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;color:var(--ink)}
+.search svg{position:absolute;left:15px;top:12px;width:18px;color:var(--mute)}
+.hero{padding:44px 0 36px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 20%;opacity:.16;filter:saturate(1.2)}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,247,252,.2),var(--bg))}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}
+.tag{display:inline-block;background:var(--sun);font-weight:600;font-size:13px;padding:5px 12px;border-radius:99px;margin-bottom:16px}
+h1{font:800 clamp(38px,6vw,76px)/.98 var(--d);letter-spacing:-.045em;margin-bottom:16px}
+.lead{color:var(--mute);max-width:52ch;margin-bottom:24px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:99px;font-weight:600;transition:.2s}
+.btn.p{background:var(--blue);color:#fff;box-shadow:0 8px 20px -8px var(--blue)}
+.btn.p:hover{background:var(--blue-d);transform:translateY(-2px)}
+.btn.g{background:#fff;border:1.5px solid var(--line);margin-left:8px}
+.btn.g:hover{border-color:var(--ink)}
+.hero-poster{justify-self:center;width:min(300px,70%);aspect-ratio:2/3;border-radius:22px;background:#dfe3f3 center/cover;box-shadow:0 30px 50px -20px rgba(20,23,43,.45);transform:rotate(3deg);border:6px solid #fff;cursor:pointer;transition:.3s}
+.hero-poster:hover{transform:rotate(0) scale(1.03)}
+.filters{padding:8px 0 22px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:thin}
+.chip{white-space:nowrap;padding:8px 16px;border-radius:99px;background:#fff;border:1.5px solid var(--line);font-weight:500;transition:.15s}
+.chip:hover{border-color:var(--blue)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.f{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:8px 14px;font-size:14px}
+.f select,.f input[type=number]{border:0;background:none;font:inherit;color:var(--ink);outline:0}
+.f input[type=number]{width:72px}
+.f input[type=range]{accent-color:var(--blue);width:120px}
+.reset{color:var(--blue);font-weight:600;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:22px;padding-bottom:24px}
+.card{text-align:left;display:block;width:100%}
+.poster{position:relative;aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;background:#dfe3f3;box-shadow:0 10px 24px -14px rgba(20,23,43,.5);transition:.25s}
+.poster img{width:100%;height:100%;object-fit:cover;display:block}
+.card:hover .poster{transform:translateY(-6px);box-shadow:0 20px 30px -14px rgba(58,58,242,.55)}
+.rate{position:absolute;top:10px;left:10px;background:var(--sun);font-weight:800;font-size:13px;padding:3px 9px;border-radius:99px}
+.play{position:absolute;inset:auto 10px 10px auto;width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;opacity:0;transform:scale(.7);transition:.2s}
+.card:hover .play,.card:focus-visible .play{opacity:1;transform:none}
+.card h3{font:600 15px var(--b);margin:10px 2px 0;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.card small{color:var(--mute);margin-left:2px}
+.sk{aspect-ratio:2/3;border-radius:var(--r);background:linear-gradient(100deg,#e6e9f5 30%,#f3f5fc 50%,#e6e9f5 70%);background-size:200%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.empty{text-align:center;padding:60px 0;color:var(--mute)}
+.more{display:block;margin:8px auto 60px}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--mute);font-size:13px;text-align:center}
+.ov{position:fixed;inset:0;z-index:50;background:rgba(20,23,43,.6);backdrop-filter:blur(6px);display:grid;place-items:start center;overflow-y:auto;padding:4vh 14px}
+.modal{background:#fff;border-radius:24px;width:min(900px,100%);overflow:hidden;position:relative;animation:pop .25s ease}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.97)}}
+.x{position:absolute;top:12px;right:12px;z-index:3;width:38px;height:38px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.25);font-size:20px}
+.video{aspect-ratio:16/9;background:#0e1020 center/cover;position:relative;display:grid;place-items:center;color:#fff;text-align:center}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.info{padding:26px 30px 32px}
+.info h2{font:800 clamp(26px,4vw,38px)/1.05 var(--d);letter-spacing:-.03em}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.meta span{background:var(--bg);border:1px solid var(--line);padding:4px 12px;border-radius:99px;font-size:13px}
+.meta .s{background:var(--sun);border-color:var(--sun);font-weight:700}
+.tl{color:var(--mute);font-style:italic;margin-bottom:10px}
+.cast{margin-top:16px;color:var(--mute);font-size:14px}
+.cast b{color:var(--ink)}
+@media(max-width:760px){.hero .wrap{grid-template-columns:1fr}.hero-poster{display:none}.grid{grid-template-columns:repeat(2,1fr);gap:14px}.search{max-width:none}.logo{font-size:24px}.info{padding:20px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body x-data="nobaarr()" x-init="init()" @keydown.escape.window="close()">
+
+<header><div class="wrap bar">
+  <a class="logo" href="#"><i></i>Nobaarr</a>
+  <label class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="search" placeholder="Cari judul film…" aria-label="Cari film" x-model.debounce.450ms="query" @input.debounce.450ms="reload()">
+  </label>
+</div></header>
+
+<section class="hero" x-show="hero" x-cloak>
+  <div class="hero-bg" :style="hero && `background-image:url(${img('w1280',hero.backdrop_path)})`"></div>
+  <div class="wrap">
+    <div>
+      <span class="tag">Lagi ramai minggu ini</span>
+      <h1 x-text="hero?.title"></h1>
+      <p class="lead" x-text="hero?.overview || 'Belum ada sinopsis dalam Bahasa Indonesia.'"></p>
+      <button class="btn p" @click="open(hero.id)">▶ Tonton trailer</button>
+      <button class="btn g" @click="open(hero.id,false)">Lihat detail</button>
+    </div>
+    <div class="hero-poster" role="button" tabindex="0" :style="hero && `background-image:url(${img('w500',hero.poster_path)})`" @click="open(hero.id)" @keydown.enter="open(hero.id)" aria-label="Buka trailer"></div>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="filters">
+    <div class="chips" role="group" aria-label="Genre">
+      <button class="chip" :class="!selected.length&&'on'" @click="selected=[];reload()">Semua</button>
+      <template x-for="g in genres" :key="g.id">
+        <button class="chip" :class="selected.includes(g.id)&&'on'" @click="toggle(g.id)" x-text="g.name"></button>
+      </template>
+    </div>
+    <div class="row">
+      <label class="f">Urutkan
+        <select x-model="sort" @change="reload()">
+          <option value="popularity.desc">Terpopuler</option>
+          <option value="vote_average.desc">Rating tertinggi</option>
+          <option value="primary_release_date.desc">Terbaru</option>
+          <option value="revenue.desc">Terlaris</option>
+        </select>
+      </label>
+      <label class="f">Tahun
+        <select x-model="year" @change="reload()">
+          <option value="">Semua</option>
+          <template x-for="y in years" :key="y"><option :value="y" x-text="y"></option></template>
+        </select>
+      </label>
+      <label class="f">Rating ≥ <b x-text="minRating"></b>
+        <input type="range" min="0" max="9" step="1" x-model.number="minRating" @change="reload()"></label>
+      <button class="reset" x-show="active" @click="resetAll()">Reset filter</button>
+    </div>
+  </div>
+
+  <div class="grid" x-show="loading && !movies.length">
+    <template x-for="i in 12"><div class="sk"></div></template>
+  </div>
+
+  <div class="grid" x-show="movies.length">
+    <template x-for="m in movies" :key="m.id">
+      <button class="card" @click="open(m.id)" :aria-label="'Trailer '+m.title">
+        <div class="poster">
+          <img loading="lazy" :src="img('w342',m.poster_path)" :alt="m.title" x-show="m.poster_path">
+          <span class="rate" x-text="'★ '+m.vote_average.toFixed(1)"></span>
+          <span class="play">▶</span>
+        </div>
+        <h3 x-text="m.title"></h3>
+        <small x-text="(m.release_date||'').slice(0,4)||'—'"></small>
+      </button>
+    </template>
+  </div>
+
+  <div class="empty" x-show="!loading && !movies.length" x-cloak>
+    <p x-text="error || 'Tidak ada film yang cocok. Coba longgarkan filter atau ganti kata kunci.'"></p>
+  </div>
+  <button class="btn p more" x-show="page<totalPages && movies.length" @click="more()" :disabled="loading" x-text="loading?'Memuat…':'Muat lebih banyak'"></button>
+</main>
+
+<footer>Nobaarr · Data film dari TMDB. Produk ini memakai TMDB API tetapi tidak didukung atau disertifikasi oleh TMDB.</footer>
+
+<div class="ov" x-show="modal" x-cloak x-transition.opacity @click.self="close()" role="dialog" aria-modal="true" x-effect="document.body.style.overflow=modal?'hidden':''">
+  <div class="modal" x-show="modal">
+    <button class="x" @click="close()" aria-label="Tutup">×</button>
+    <div class="video" :style="modal && !playing && `background-image:url(${img('w1280',modal.backdrop_path)})`">
+      <template x-if="playing && trailerKey">
+        <iframe :src="`https://www.youtube-nocookie.com/embed/${trailerKey}?autoplay=1&rel=0`" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Trailer"></iframe>
+      </template>
+      <template x-if="!playing && trailerKey">
+        <button class="btn p" @click="playing=true">▶ Putar trailer</button>
+      </template>
+      <p x-show="!trailerKey" style="background:rgba(20,23,43,.75);padding:10px 18px;border-radius:12px">Trailer belum tersedia untuk film ini.</p>
+    </div>
+    <div class="info" x-show="modal">
+      <h2 x-text="modal?.title"></h2>
+      <p class="tl" x-show="modal?.tagline" x-text="modal?.tagline"></p>
+      <div class="meta">
+        <span class="s" x-text="modal ? '★ '+modal.vote_average.toFixed(1) : ''"></span>
+        <span x-text="(modal?.release_date||'').slice(0,4)"></span>
+        <span x-show="modal?.runtime" x-text="modal?.runtime+' menit'"></span>
+        <template x-for="g in (modal?.genres||[])"><span x-text="g.name"></span></template>
+      </div>
+      <p x-text="modal?.overview || 'Belum ada sinopsis dalam Bahasa Indonesia.'"></p>
+      <p class="cast" x-show="cast"><b>Pemeran:</b> <span x-text="cast"></span></p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ====== KONFIGURASI ======
+const TMDB_KEY = 'ef80dc8318ef3ead325966eb252d179d';
+// =========================
+function nobaarr(){return{
+  genres:[],movies:[],hero:null,selected:[],sort:'popularity.desc',year:'',minRating:0,query:'',
+  page:1,totalPages:1,loading:false,error:'',modal:null,trailerKey:null,playing:false,cast:'',
+  get years(){const n=new Date().getFullYear()+1;return Array.from({length:n-1949},(_,i)=>n-i)},
+  get active(){return this.selected.length||this.year||this.minRating||this.sort!=='popularity.desc'||this.query},
+  img(s,p){return p?`https://image.tmdb.org/t/p/${s}${p}`:''},
+  async api(path,params={}){
+    const u=new URL('https://api.themoviedb.org/3'+path);
+    u.search=new URLSearchParams({api_key:TMDB_KEY,language:'id-ID',...params});
+    const r=await fetch(u); if(!r.ok) throw new Error('TMDB error '+r.status); return r.json();
+  },
+  async init(){
+    try{
+      const [g,t]=await Promise.all([this.api('/genre/movie/list'),this.api('/trending/movie/week')]);
+      this.genres=g.genres; this.hero=t.results.find(m=>m.backdrop_path)||t.results[0];
+    }catch(e){this.error='Gagal terhubung ke TMDB. Periksa koneksi atau API key kamu.'}
+    this.reload();
+  },
+  toggle(id){const i=this.selected.indexOf(id);i<0?this.selected.push(id):this.selected.splice(i,1);this.reload()},
+  resetAll(){this.selected=[];this.year='';this.minRating=0;this.sort='popularity.desc';this.query='';this.reload()},
+  async reload(){this.page=1;this.movies=[];await this.load()},
+  async more(){this.page++;await this.load()},
+  async load(){
+    this.loading=true;this.error='';
+    try{
+      let d;
+      if(this.query.trim()){
+        d=await this.api('/search/movie',{query:this.query.trim(),page:this.page,year:this.year||''});
+        d.results=d.results.filter(m=>m.vote_average>=this.minRating&&this.selected.every(g=>m.genre_ids.includes(g)));
+      }else{
+        const p={page:this.page,sort_by:this.sort,'vote_count.gte':this.sort.startsWith('vote')?300:20,'vote_average.gte':this.minRating};
+        if(this.selected.length)p.with_genres=this.selected.join(',');
+        if(this.year)p.primary_release_year=this.year;
+        if(this.sort.startsWith('primary_release'))p['release_date.lte']=new Date().toISOString().slice(0,10);
+        d=await this.api('/discover/movie',p);
+      }
+      this.totalPages=Math.min(d.total_pages,500);
+      this.movies.push(...d.results.filter(m=>!this.movies.some(x=>x.id===m.id)));
+    }catch(e){this.error='Gagal memuat film. Coba lagi sebentar lagi.'}
+    this.loading=false;
+  },
+  async open(id,autoplay=true){
+    this.modal={title:'Memuat…',vote_average:0,genres:[]};this.trailerKey=null;this.playing=false;this.cast='';
+    try{
+      const d=await this.api('/movie/'+id,{append_to_response:'videos,credits',include_video_language:'id,en,null'});
+      const v=d.videos.results.filter(x=>x.site==='YouTube');
+      const pick=v.find(x=>x.type==='Trailer'&&x.official)||v.find(x=>x.type==='Trailer')||v.find(x=>x.type==='Teaser')||v[0];
+      this.trailerKey=pick?.key||null;
+      this.cast=d.credits.cast.slice(0,6).map(c=>c.name).join(', ');
+      this.modal=d;this.playing=autoplay&&!!this.trailerKey;
+    }catch(e){this.modal=null;this.error='Gagal membuka detail film.'}
+  },
+  close(){this.modal=null;this.playing=false;this.trailerKey=null}
+}}
+</script>
+</body>
+</html>
